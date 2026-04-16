@@ -9,8 +9,9 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { LoginDto } from './dot/login.dto';
-import { HttpExceptionFilter } from 'src/common/exceptions/exception.filter';
 import { ValidationPipeOptions } from 'src/common/pipe/validation.pipe';
+import { MongoExceptionFilter } from 'src/common/filters/mongo_exception.filter';
+import { ValidationFilter } from 'src/common/filters/validation_exception.filter';
 
 @Controller('auth')
 export class AuthController {
@@ -18,7 +19,7 @@ export class AuthController {
 
   @Get('login')
   @UsePipes(new ValidationPipe(ValidationPipeOptions))
-  @UseFilters(new HttpExceptionFilter())
+  @UseFilters(MongoExceptionFilter, ValidationFilter)
   login(@Query() query: LoginDto) {
     // throw new HttpException('Login failed', HttpStatus.UNAUTHORIZED);
     return {
